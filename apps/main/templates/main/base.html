@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	{% load static %}
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
+	<meta name="author" content="AdminKit">
+	<meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link rel="shortcut icon" href="{% static 'main/img/icons/icon-48x48.png" />
+
+	<link rel="canonical" href="https://demo.adminkit.io/" />
+
+	<title>OeP Company CM</title>
+
+	<link href="{% static 'main/css/app.css' %}" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+	<!-- BEGIN SETTINGS -->
+	<script src="{% static 'main/js/settings.js' %}"></script>
+	<!-- END SETTINGS -->
+</head>
+<!--
+  HOW TO USE: 
+  data-theme: default (default), dark, light
+  data-layout: fluid (default), boxed
+  data-sidebar: left (default), right
+-->
+
+<body data-theme="default" data-layout="fluid" data-sidebar="left">
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar">
+			<div class="sidebar-content js-simplebar">
+				<a class="sidebar-brand" href="/">
+					<span class="align-middle">OeP Company</span>
+				</a>
+
+				<ul class="sidebar-nav">
+					{% if page == "index" %}
+					<li class="sidebar-item active">
+					{% else %}
+					<li class="sidebar-item">
+					{% endif %}
+						<a class="sidebar-link" href="/">
+							<i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+						</a>
+					</li>
+					
+					<li class="sidebar-header">
+						Requests
+					</li>
+
+					{% if page == "my-requests" %}
+					<li class="sidebar-item active">
+					{% else %}
+					<li class="sidebar-item">
+					{% endif %}
+						<a class="sidebar-link" href="/my-requests">
+							<i class="align-middle" data-feather="tag"></i> <span class="align-middle">My Requests</span>
+						</a>
+					</li>
+
+					{% if page == "request-change" %}
+					<li class="sidebar-item active">
+					{% else %}
+					<li class="sidebar-item">
+					{% endif %}
+						<a class="sidebar-link" href="/request-change">
+							<i class="align-middle" data-feather="edit"></i> <span class="align-middle">Request a Change</span>
+						</a>
+					</li>
+
+					<li class="sidebar-header">
+						Change Log
+					</li>
+					
+					{% if page == "assigned-me" %}
+					<li class="sidebar-item active">
+					{% else %}
+					<li class="sidebar-item">
+					{% endif %}
+						<a class="sidebar-link" href="/assigned-me">
+							<i class="align-middle" data-feather="user"></i> <span class="align-middle">Assigned to Me</span>
+						</a>
+					</li>
+
+					{% if page == "active-changes" %}
+					<li class="sidebar-item active">
+					{% else %}
+					<li class="sidebar-item">
+					{% endif %}
+						<a class="sidebar-link" href="/active-changes">
+							<i class="align-middle" data-feather="target"></i> <span class="align-middle">Active Changes</span>
+						</a>
+					</li>
+
+					{% if page == "past-changes" %}
+					<li class="sidebar-item active">
+					{% else %}
+					<li class="sidebar-item">
+					{% endif %}
+						<a class="sidebar-link" href="/past-changes">
+							<i class="align-middle" data-feather="check-circle"></i> <span class="align-middle">Past Changes</span>
+						</a>
+					</li>
+
+					<li class="sidebar-header">
+						Reports (Coming Soon)
+					</li>
+					
+					{% if page == "all-changes" %}
+					<li class="sidebar-item active">
+					{% else %}
+					<li class="sidebar-item">
+					{% endif %}
+						<a class="sidebar-link" href="/report/all-changes">
+							<i class="align-middle" data-feather="file-text"></i> <span class="align-middle">All Changes</span>
+						</a>
+					</li>	
+
+					{% if page == "change-timelines" %}
+					<li class="sidebar-item active">
+					{% else %}
+					<li class="sidebar-item">
+					{% endif %}
+						<a class="sidebar-link" href="/report/change-timelines">
+							<i class="align-middle" data-feather="file-text"></i> <span class="align-middle">Change Timelines</span>
+						</a>
+					</li>	
+
+					{% if page == "chnage-percentages" %}
+					<li class="sidebar-item active">
+					{% else %}
+					<li class="sidebar-item">
+					{% endif %}
+						<a class="sidebar-link" href="/report/change-percentages">
+							<i class="align-middle" data-feather="file-text"></i> <span class="align-middle">Change Success/Failure</span>
+						</a>
+					</li>	
+				</ul>
+			</div>
+		</nav>
+
+		<div class="main">
+			<nav class="navbar navbar-expand navbar-light navbar-bg">
+				<a class="sidebar-toggle d-flex">
+					<i class="hamburger align-self-center"></i>
+				</a>
+
+				<form class="d-none d-sm-inline-block">
+					<div class="input-group input-group-navbar">
+						<input type="text" class="form-control" placeholder="Search" aria-label="Search">
+						<button class="btn" type="button">
+							<i class="align-middle" data-feather="search"></i>
+						</button>
+					</div>
+				</form>
+
+				<div class="navbar-collapse collapse">
+					<ul class="navbar-nav navbar-align">
+						<li class="nav-item dropdown">
+							<a class="nav-flag dropdown-toggle" href="#" id="languageDropdown" data-bs-toggle="dropdown">
+								<img src="{% static 'main/img/flags/us.png' %}" alt="English" />
+							</a>
+							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+								<a class="dropdown-item" href="#">
+									<img src="{% static 'main/img/flags/us.png' %}" alt="English" width="20" class="align-middle me-1" />
+									<span class="align-middle">English</span>
+								</a>
+								<a class="dropdown-item" href="#">
+									<img src="{% static 'main/img/flags/es.png' %}" alt="Spanish" width="20" class="align-middle me-1" />
+									<span class="align-middle">Spanish (Unavailible)</span>
+								</a>
+								<a class="dropdown-item" href="#">
+									<img src="{% static 'main/img/flags/ru.png' %}" alt="Russian" width="20" class="align-middle me-1" />
+									<span class="align-middle">Russian (Unavailible)</span>
+								</a>
+								<a class="dropdown-item" href="#">
+									<img src="{% static 'main/img/flags/de.png' %}" alt="German" width="20" class="align-middle me-1" />
+									<span class="align-middle">German (Unavailible)</span>
+								</a>
+							</div>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
+								<i class="align-middle" data-feather="settings"></i>
+							</a>
+
+							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+								<!-- <img src="{% static 'main/img/avatars/no_avatar.jpg' %}" class="avatar img-fluid rounded me-1" alt="Charles Hall" />  -->
+								<span class="text-dark">{{request.session.firstName}} {{request.session.lastName}}</span>
+							</a>
+							<div class="dropdown-menu dropdown-menu-end">
+								<!-- <a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
+								<a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="pie-chart"></i> Analytics</a>
+								<div class="dropdown-divider"></div> -->
+								<!-- <a class="dropdown-item" href="pages-settings.html"><i class="align-middle me-1" data-feather="settings"></i> Settings &
+									Privacy</a> -->
+								{% if request.session.permission == 'administrator' %}
+								<a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="shield"></i> Admin Panel </a>
+								<div class="dropdown-divider"></div>
+								{% endif %}
+								<a class="dropdown-item" href="/logout"><i class="align-middle me-1" data-feather="lock"></i> Log out </a>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</nav>
+
+			{% block content %}
+            {% endblock %}
+
+			<footer class="footer">
+				<div class="container-fluid">
+					<div class="row text-muted">
+						<div class="col-6 text-start">
+							<p class="mb-0">
+								<a href="index.html" class="text-muted"><strong>OeP Company Change Management System</strong></a> &copy;
+							</p>
+						</div>
+						<div class="col-6 text-end">
+							<ul class="list-inline">
+								<li class="list-inline-item">
+									<a class="text-muted" href="#">Support</a>
+								</li>
+								<li class="list-inline-item">
+									<a class="text-muted" href="#">Help Center</a>
+								</li>
+								<li class="list-inline-item">
+									<a class="text-muted" href="#">Privacy</a>
+								</li>
+								<li class="list-inline-item">
+									<a class="text-muted" href="#">Terms</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+
+	<script src="{% static 'main/js/app.js' %}"></script>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			var ctx = document.getElementById("chartjs-dashboard-line").getContext("2d");
+			var gradient = ctx.createLinearGradient(0, 0, 0, 225);
+			gradient.addColorStop(0, "rgba(215, 227, 244, 1)");
+			gradient.addColorStop(1, "rgba(215, 227, 244, 0)");
+			// Line chart
+			new Chart(document.getElementById("chartjs-dashboard-line"), {
+				type: "line",
+				data: {
+					labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+					datasets: [{
+						label: "Sales ($)",
+						fill: true,
+						backgroundColor: gradient,
+						borderColor: window.theme.primary,
+						data: [
+							2115,
+							1562,
+							1584,
+							1892,
+							1587,
+							1923,
+							2566,
+							2448,
+							2805,
+							3438,
+							2917,
+							3327
+						]
+					}]
+				},
+				options: {
+					maintainAspectRatio: false,
+					legend: {
+						display: false
+					},
+					tooltips: {
+						intersect: false
+					},
+					hover: {
+						intersect: true
+					},
+					plugins: {
+						filler: {
+							propagate: false
+						}
+					},
+					scales: {
+						xAxes: [{
+							reverse: true,
+							gridLines: {
+								color: "rgba(0,0,0,0.0)"
+							}
+						}],
+						yAxes: [{
+							ticks: {
+								stepSize: 1000
+							},
+							display: true,
+							borderDash: [3, 3],
+							gridLines: {
+								color: "rgba(0,0,0,0.0)"
+							}
+						}]
+					}
+				}
+			});
+		});
+	</script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			// Pie chart
+			new Chart(document.getElementById("chartjs-dashboard-pie"), {
+				type: "pie",
+				data: {
+					labels: ["Chrome", "Firefox", "IE"],
+					datasets: [{
+						data: [4306, 3801, 1689],
+						backgroundColor: [
+							window.theme.primary,
+							window.theme.warning,
+							window.theme.danger
+						],
+						borderWidth: 5
+					}]
+				},
+				options: {
+					responsive: !window.MSInputMethodContext,
+					maintainAspectRatio: false,
+					legend: {
+						display: false
+					},
+					cutoutPercentage: 75
+				}
+			});
+		});
+	</script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			// Bar chart
+			new Chart(document.getElementById("chartjs-dashboard-bar"), {
+				type: "bar",
+				data: {
+					labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+					datasets: [{
+						label: "This year",
+						backgroundColor: window.theme.primary,
+						borderColor: window.theme.primary,
+						hoverBackgroundColor: window.theme.primary,
+						hoverBorderColor: window.theme.primary,
+						data: [54, 67, 41, 55, 62, 45, 55, 73, 60, 76, 48, 79],
+						barPercentage: .75,
+						categoryPercentage: .5
+					}]
+				},
+				options: {
+					maintainAspectRatio: false,
+					legend: {
+						display: false
+					},
+					scales: {
+						yAxes: [{
+							gridLines: {
+								display: false
+							},
+							stacked: false,
+							ticks: {
+								stepSize: 20
+							}
+						}],
+						xAxes: [{
+							stacked: false,
+							gridLines: {
+								color: "transparent"
+							}
+						}]
+					}
+				}
+			});
+		});
+	</script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			var markers = [{
+					coords: [31.230391, 121.473701],
+					name: "Shanghai"
+				},
+				{
+					coords: [28.704060, 77.102493],
+					name: "Delhi"
+				},
+				{
+					coords: [6.524379, 3.379206],
+					name: "Lagos"
+				},
+				{
+					coords: [35.689487, 139.691711],
+					name: "Tokyo"
+				},
+				{
+					coords: [23.129110, 113.264381],
+					name: "Guangzhou"
+				},
+				{
+					coords: [40.7127837, -74.0059413],
+					name: "New York"
+				},
+				{
+					coords: [34.052235, -118.243683],
+					name: "Los Angeles"
+				},
+				{
+					coords: [41.878113, -87.629799],
+					name: "Chicago"
+				},
+				{
+					coords: [51.507351, -0.127758],
+					name: "London"
+				},
+				{
+					coords: [40.416775, -3.703790],
+					name: "Madrid "
+				}
+			];
+			var map = new jsVectorMap({
+				map: "world",
+				selector: "#world_map",
+				zoomButtons: true,
+				markers: markers,
+				markerStyle: {
+					initial: {
+						r: 9,
+						strokeWidth: 7,
+						stokeOpacity: .4,
+						fill: window.theme.primary
+					},
+					hover: {
+						fill: window.theme.primary,
+						stroke: window.theme.primary
+					}
+				},
+				zoomOnScroll: false
+			});
+			window.addEventListener("resize", () => {
+				map.updateSize();
+			});
+		});
+	</script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			document.getElementById("datetimepicker-dashboard").flatpickr({
+				inline: true,
+				prevArrow: "<span class=\"fas fa-chevron-left\" title=\"Previous month\"></span>",
+				nextArrow: "<span class=\"fas fa-chevron-right\" title=\"Next month\"></span>",
+			});
+		});
+    </script>
+    
+    <!-- Form Validation -->
+    <script>
+		document.addEventListener("DOMContentLoaded", function() {
+			// Flatpickr
+			flatpickr(".flatpickr-minimum");
+		});
+    </script>
+    <script>
+		document.addEventListener("DOMContentLoaded", function() {
+			// Fetch all the forms we want to apply custom Bootstrap validation styles to
+			var forms = document.querySelectorAll('.needs-validation')
+			// Loop over them and prevent submission
+			Array.prototype.slice.call(forms)
+				.forEach(function(form) {
+					form.addEventListener('submit', function(event) {
+						if (!form.checkValidity()) {
+							event.preventDefault()
+							event.stopPropagation()
+                        }
+						form.classList.add('was-validated')
+					}, false)
+				})
+		});
+    </script>
+	<!-- End Form Validation -->
+	
+	<!-- Datatables JS -->
+	<script src="{% static 'main/js/datatables.js' %}"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			// Datatables Responsive
+			$("table").DataTable({
+				responsive: true
+			});
+		});
+	</script>
+	<!-- End Datatables JS -->
+
+</body>
+
+</html>

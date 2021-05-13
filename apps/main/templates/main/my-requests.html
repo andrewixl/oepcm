@@ -1,0 +1,103 @@
+{% extends 'main/base.html' %}
+{% load static %}
+  {% block content %}
+			<main class="content">
+				<div class="container-fluid p-0">
+
+					<h1 class="h3 mb-3">My Active Requests</h1>
+
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-body">
+									<table id="table" class="table table-striped" style="width:100%">
+										<thead>
+											<tr>
+												<th>Short Description</th>
+												<th>Target End Date</th>
+												<th>Days Remaining</th>
+												<th>Enviornment</th>
+												<th>Status</th>
+												<th>Assignee</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for change in active_changes %}
+											<tr>
+												<td>{{change.shortDescription}}</td>
+												<td>{{change.targetDate}}</td>
+												<td>{{change.daysLeft}}</td>
+												<td>{{change.environment|capfirst}}</td>
+												{% if change.status == "new" %}
+												<td><span class="badge bg-info">New</span></td>
+												{% elif change.status == "in_progress" %}
+												<td><span class="badge bg-warning">In Progress</span></td>
+												{% elif change.status == "done" %}
+												<td><span class="badge bg-success">Done</span></td>
+												{% elif change.status == "cancelled" %}
+												<td><span class="badge bg-danger">Cancelled</span></td>
+												{% endif %}
+												{% if change.assignee == Null %}
+												<td>None</td>
+												{% else %}
+												<td>{{change.assignee.firstName}} {{change.assignee.lastName}}</td>
+												{% endif %}
+											</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<h1 class="h3 mb-3">My Past Requests</h1>
+
+					<div class="row">
+						<div class="col-12">
+							<div class="card">
+								<div class="card-body">
+									<table id="table" class="table table-striped" style="width:100%">
+										<thead>
+											<tr>
+												<th>Short Description</th>
+												<th>Target End Date</th>
+												<th>Days Remaining</th>
+												<th>Enviornment</th>
+												<th>Status</th>
+												<th>Assignee</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for change in past_changes %}
+											<tr>
+												<td>{{change.shortDescription}}</td>
+												<td>{{change.targetDate}}</td>
+												<td>{{change.daysLeft}}</td>
+												<td>{{change.environment|capfirst}}</td>
+												{% if change.status == "new" %}
+												<td><span class="badge bg-info">New</span></td>
+												{% elif change.status == "in_progress" %}
+												<td><span class="badge bg-warning">In Progress</span></td>
+												{% elif change.status == "done" %}
+												<td><span class="badge bg-success">Done</span></td>
+												{% elif change.status == "cancelled" %}
+												<td><span class="badge bg-danger">Cancelled</span></td>
+												{% endif %}
+												{% if change.assignee == Null %}
+												<td>None</td>
+												{% else %}
+												<td>{{change.assignee.firstName}} {{change.assignee.lastName}}</td>
+												{% endif %}
+											</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</main>
+			{% endblock %}
