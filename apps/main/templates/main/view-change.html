@@ -1,0 +1,101 @@
+{% extends 'main/base.html' %}
+{% load static %}
+  {% block content %}
+			<main class="content">
+				<div class="container-fluid p-0">
+
+					<h1 class="h3 mb-3">REQ{{change.id}}</h1>
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-body">
+									<form class="needs-validation" action='/change-creation' method='post' novalidate>
+										{% csrf_token %}
+										<div class="row">
+											<div class="col-12 col-xl-6">
+												<div class="mb-3">
+													<label class="form-label">Entry Date</label>
+													<input type="text" class="form-control" name="entryDate" id="startDate" value="{{change.entryDate|date:'Y-m-d'}}" disabled/>
+												</div>
+											</div>
+											<div class="col-12 col-xl-6">
+												<div class="mb-3">
+													<label class="form-label">Target Completion Date</label>
+													<input type="text" class="form-control flatpickr-minimum" name="targetDate" id="endDate" placeholder="Select date.." value="{{change.targetDate|date:'Y-m-d'}}"/>
+												</div>
+											</div>
+										</div>
+
+										<!-- Sample JS Validation -->
+										<!-- <div class="mb-3">
+											<label for="validationCustomUsername" class="form-label">Username</label>
+											<div class="input-group">
+												<span class="input-group-text" id="inputGroupPrepend">@</span>
+												<input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend"
+													required>
+												<div class="invalid-feedback">
+													Please choose a username.
+												</div>
+											</div>
+										</div> -->
+										<!-- End Sample JS Validation -->
+
+										<div class="row">
+											<div class="mb-3 col-md-6">
+												<label class="form-label">Request Type</label>
+												<select name="requestType" class="form-select">
+													{% for x,y in types %}
+													{% if x == change.requestType %}
+													<option value={{x}}>{{y}}</option>
+													{% endif %}
+													{% endfor %}
+													{% for x,y in types %}
+													{% if x != change.requestType %}
+													<option value={{x}}>{{y}}</option>
+													{% endif %}
+													{% endfor %}
+												</select>
+											</div>
+											<div class="mb-3 col-md-6">
+												<label class="form-label" for="inputPassword4">Requestor</label>
+												<input type="text" class="form-control" name="requestor" id="requestor" value="{{change.requestor.firstName}} {{change.requestor.lastName}} ({{change.requestor.email}})" disabled>
+											</div>
+										</div>
+										<div class="row">
+											<div class="mb-3 col-md-6">
+												<label class="form-label">Enviornment</label>
+												<select name="enviornment" class="form-select">
+													<option>Select Enviornment</option>
+													{% for x,y in enviornments %}
+													<option value={{x}}>{{y}}</option>
+													{% endfor %}
+												</select>
+											</div>
+										</div>
+										<div class="mb-3">
+											<label class="form-label" for="inputAddress">Short Description</label>
+											<input type="text" class="form-control" name="shortDescription" id="inputAddress" placeholder="Title / Issue">
+										</div>
+										<div class="mb-3">
+											<label class="form-label" for="inputAddress2">Full Description / Notes</label>
+											<textarea type="text" class="form-control" name="longDescription" id="inputAddress2" placeholder="Data Being Changed / Permissions / Etc."></textarea>
+										</div><div class="mb-3">
+											<label class="form-label" for="inputAddress2">Change Impact</label>
+											<textarea type="text" class="form-control" name="changeImpact" id="inputAddress2" placeholder="What could be impacted by this change?"></textarea>
+										</div>
+										<div class="mb-3">
+											<label class="form-label w-100">Supplemental File</label>
+											<input type="file" name=fileUpload>
+											<!-- <small class="form-text text-muted">Example block-level help text here.</small> -->
+										</div>
+										<button type="submit" class="btn btn-primary">Submit</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</main>
+			{% endblock %}

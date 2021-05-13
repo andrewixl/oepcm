@@ -55,6 +55,7 @@ def index(request):
 		"page": "index",
 		"active_changes": active_changes,
 		"past_due_changes": past_due_changes,
+		"changes": changes,
 	}
 	return render( request, 'main/index.html', context)
 
@@ -174,6 +175,28 @@ def pastChanges(request):
 	}
 	return render( request, 'main/past-Changes.html', context)
 
+############################################################################################
+
+def viewChange(request, id):
+	results = []
+	results.append(checkLogin(request))
+	results.append(checkActive(request))
+	if results[0] == False:
+		return redirect('/login')
+	if results[1] == False:
+		return redirect('/account-suspended')
+
+	# Get Change
+	change = Change.objects.get(id = id)
+
+	context = {
+	'change': change,
+	'types': Change.TYPE,
+	}
+	return render( request, 'main/view-change.html', context)
+
+############################################################################################
+
 def error500(request):
 	results = []
 	results.append(checkLogin(request))
@@ -183,6 +206,8 @@ def error500(request):
 	if results[1] == False:
 		return redirect('/account-suspended')
 	return render( request, 'main/pages-500.html')
+
+############################################################################################
 
 def error403(request):
 	results = []

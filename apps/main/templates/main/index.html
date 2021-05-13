@@ -246,7 +246,8 @@
 					</div> -->
 
 					<div class="row">
-						<div class="col-12 col-lg-8 col-xxl-9 d-flex">
+						<!-- <div class="col-12 col-lg-8 col-xxl-9 d-flex"> -->
+						<div class="mb-3 d-flex">
 							<div class="card flex-fill">
 								<div class="card-header">
 									<div class="card-actions float-end">
@@ -262,75 +263,42 @@
 											</div>
 										</div> -->
 									</div>
-									<h5 class="card-title mb-0">Latest Changes</h5>
+									<h5 class="card-title mb-0"><strong>Latest Changes</strong></h5>
 								</div>
-								<table class="table table-hover my-0">
+								<table id="table" class="table table-striped" style="width:100%">
 									<thead>
 										<tr>
-											<th>Name</th>
-											<th class="d-none d-xl-table-cell">Start Date</th>
-											<th class="d-none d-xl-table-cell">End Date</th>
+											<th>Short Description</th>
+											<th>Target End Date</th>
+											<th>Days Remaining</th>
+											<th>Enviornment</th>
 											<th>Status</th>
-											<th class="d-none d-md-table-cell">Assignee</th>
+											<th>Assignee</th>
 										</tr>
 									</thead>
 									<tbody>
+										{% for change in changes %}
 										<tr>
-											<td>Project Apollo</td>
-											<td class="d-none d-xl-table-cell">01/01/2021</td>
-											<td class="d-none d-xl-table-cell">31/06/2021</td>
+											<td>{{change.shortDescription}}</td>
+											<td>{{change.targetDate}}</td>
+											<td>{{change.daysLeft}}</td>
+											<td>{{change.environment|capfirst}}</td>
+											{% if change.status == "new" %}
+											<td><span class="badge bg-info">New</span></td>
+											{% elif change.status == "in_progress" %}
+											<td><span class="badge bg-warning">In Progress</span></td>
+											{% elif change.status == "done" %}
 											<td><span class="badge bg-success">Done</span></td>
-											<td class="d-none d-md-table-cell">Vanessa Tucker</td>
-										</tr>
-										<tr>
-											<td>Project Fireball</td>
-											<td class="d-none d-xl-table-cell">01/01/2021</td>
-											<td class="d-none d-xl-table-cell">31/06/2021</td>
+											{% elif change.status == "cancelled" %}
 											<td><span class="badge bg-danger">Cancelled</span></td>
-											<td class="d-none d-md-table-cell">William Harris</td>
+											{% endif %}
+											{% if change.assignee == Null %}
+											<td>None</td>
+											{% else %}
+											<td>{{change.assignee.firstName}} {{change.assignee.lastName}}</td>
+											{% endif %}
 										</tr>
-										<tr>
-											<td>Project Hades</td>
-											<td class="d-none d-xl-table-cell">01/01/2021</td>
-											<td class="d-none d-xl-table-cell">31/06/2021</td>
-											<td><span class="badge bg-success">Done</span></td>
-											<td class="d-none d-md-table-cell">Sharon Lessman</td>
-										</tr>
-										<tr>
-											<td>Project Nitro</td>
-											<td class="d-none d-xl-table-cell">01/01/2021</td>
-											<td class="d-none d-xl-table-cell">31/06/2021</td>
-											<td><span class="badge bg-warning">In progress</span></td>
-											<td class="d-none d-md-table-cell">Vanessa Tucker</td>
-										</tr>
-										<tr>
-											<td>Project Phoenix</td>
-											<td class="d-none d-xl-table-cell">01/01/2021</td>
-											<td class="d-none d-xl-table-cell">31/06/2021</td>
-											<td><span class="badge bg-success">Done</span></td>
-											<td class="d-none d-md-table-cell">William Harris</td>
-										</tr>
-										<tr>
-											<td>Project X</td>
-											<td class="d-none d-xl-table-cell">01/01/2021</td>
-											<td class="d-none d-xl-table-cell">31/06/2021</td>
-											<td><span class="badge bg-success">Done</span></td>
-											<td class="d-none d-md-table-cell">Sharon Lessman</td>
-										</tr>
-										<tr>
-											<td>Project Romeo</td>
-											<td class="d-none d-xl-table-cell">01/01/2021</td>
-											<td class="d-none d-xl-table-cell">31/06/2021</td>
-											<td><span class="badge bg-warning">In progress</span></td>
-											<td class="d-none d-md-table-cell">Christina Mason</td>
-										</tr>
-										<tr>
-											<td>Project Wombat</td>
-											<td class="d-none d-xl-table-cell">01/01/2021</td>
-											<td class="d-none d-xl-table-cell">31/06/2021</td>
-											<td><span class="badge bg-danger">Cancelled</span></td>
-											<td class="d-none d-md-table-cell">William Harris</td>
-										</tr>
+										{% endfor %}
 									</tbody>
 								</table>
 							</div>

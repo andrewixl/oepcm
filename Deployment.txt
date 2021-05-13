@@ -1,0 +1,75 @@
+sudo apt-get update
+sudo apt-get install python3-pip python3-dev nginx git unixodbc-dev
+sudo apt-get update
+sudo pip3 install virtualenv
+
+git clone https://github.com/andrewixl/oepcm.git
+6b3782a911e63b3989cd2e66861e6aa737ff7b68
+
+cd oepcm
+
+virtualenv venv
+source venv/bin/activate
+pip install -r requirements.txt
+pip install django bcrypt django-extensions
+pip install gunicorn
+
+cd oepcm
+
+sudo vim settings.py
+
+__________________________________________
+
+DEBUG = False
+ALLOWED_HOSTS = ['192.168.0.48']
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
+cd ..
+
+python manage.py collectstatic
+gunicorn --bind 0.0.0.0:0000 oepcm.wsgi:application
+
+ctrl-c
+
+deactivate
+
+sudo vim /etc/systemd/system/gunicorn.service
+
+[Unit]
+Description=gunicorn daemon
+After=network.target
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/oepcm
+ExecStart=/home/ubuntu/oepcm/venv/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/oepcm/oepcm.sock oepcm.wsgi:application
+[Install]
+WantedBy=multi-user.target
+
+sudo systemctl daemon-reload
+sudo systemctl start gunicorn
+sudo systemctl enable gunicorn
+
+sudo vim /etc/nginx/sites-available/oepcm
+
+server {
+	listen 80;
+	server_name 192.168.0.75 oepcm.awbtech.org;
+	location = /favicon.ico { access_log off; log_not_found off; }
+	location /static/ {
+		root /home/ubuntu/oepcm;
+	}
+	location / {
+		include proxy_params;
+		proxy_pass http://unix:/home/ubuntu/oepcm/oepcm.sock;
+	}
+}
+
+sudo ln -s /etc/nginx/sites-available/oepcm /etc/nginx/sites-enabled
+sudo nginx -t
+
+sudo rm /etc/nginx/sites-enabled/default
+sudo service nginx restart
+
+
+

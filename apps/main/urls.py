@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^assigned-me$', views.assignedMe),
     url(r'^active-changes$', views.activeChanges),
     url(r'^past-changes$', views.pastChanges),
+    url(r'^change/(?P<id>\d+)$', views.viewChange),
     url(r'^report/all-changes$', views.error500),
     url(r'^report/change-timelines$', views.error500),
     url(r'^report/change-percentages$', views.error500),
