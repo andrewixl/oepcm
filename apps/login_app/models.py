@@ -52,10 +52,12 @@ class UserManager(models.Manager):
 			results['status'] = False
 			results['errors'].append('User does not exist')
 		else:
-			hashed = bcrypt.hashpw(postData['password'].encode(), results['user'][0].password.encode())
-			if hashed  != results['user'][0].password:
+			user = User.objects.get(email = postData['email'])
+			if bcrypt.checkpw(postData['password'].encode(), user.password):
+				print('match')
+			else:
 				results['status'] = False
-				results['errors'].append('Something went wrong')
+				results['errors'].append('Password is Incorrect')				
 		return results
 	
 	def changePassword(self, postData, id):

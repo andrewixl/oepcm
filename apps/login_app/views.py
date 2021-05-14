@@ -19,9 +19,9 @@ def checkUser(request):
 		return False
 
 def identity(request):
-	results = checkUser(request)
-	if results == False:
-		return redirect('/login')
+	# results = checkUser(request)
+	# if results == False:
+	# 	return redirect('/login')
 	return render(request, 'login_app/identity.html')
 
 def login(request):
@@ -51,8 +51,11 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 def checklogin(request):
 	results = User.objects.loginVal(request.POST)
 	if results['status'] == False:
+	# if results == False:
 		print("THERE IS AN ERROR")
 		genErrors(request, results['errors'])
+		# genErrors(request, 'Password Incorrect')
+
 		return redirect('/identity')
 	request.session['active'] = results['user'][0].active
 	request.session['permission'] = results['user'][0].permission

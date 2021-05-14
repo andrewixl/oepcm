@@ -39,10 +39,10 @@ sudo vim /etc/systemd/system/gunicorn.service
 Description=gunicorn daemon
 After=network.target
 [Service]
-User=administrator
+User=ubuntu
 Group=www-data
-WorkingDirectory=/home/administrator/oepcm
-ExecStart=/home/administrator/oepcm/venv/bin/gunicorn --workers 3 --bind unix:/home/administrator/oepcm/oepcm.sock oepcm.wsgi:application
+WorkingDirectory=/home/ubuntu/oepcm
+ExecStart=/home/ubuntu/oepcm/venv/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/oepcm/oepcm.sock oepcm.wsgi:application
 [Install]
 WantedBy=multi-user.target
 
@@ -54,7 +54,7 @@ sudo vim /etc/nginx/sites-available/oepcm
 
 server {
 	listen 80;
-	server_name 192.168.0.180 oepcm.awbtech.org;
+	server_name 3.140.171.29;
 	location = /favicon.ico { access_log off; log_not_found off; }
 	location /static/ {
 		root /home/ubuntu/oepcm;
