@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-e+0!pl6g9yci%u34dp4*2^@!7e_$05^ax_!i$+n#j9k5(+lmkf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -53,10 +53,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'oepcm.urls'
 
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATE_DIR, ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -129,4 +130,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 # Used for File Uploads
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'

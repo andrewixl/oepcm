@@ -24,7 +24,7 @@
 										<tbody>
 											{% for change in active_changes %}
 											<tr>
-												<td>{{change.shortDescription}}</td>
+												<td><a href="/change/req{{change.id}}">{{change.shortDescription}}</a></td>
 												<td>{{change.targetDate}}</td>
 												<td>{{change.daysLeft}}</td>
 												<td>{{change.environment|capfirst}}</td>

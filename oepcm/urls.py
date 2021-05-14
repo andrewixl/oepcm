@@ -22,3 +22,5 @@ urlpatterns = [
     url(r'^', include('apps.main.urls')),
     url(r'^', include('apps.login_app.urls')),
 ]
+
+handler404 = 'apps.main.views.error404'

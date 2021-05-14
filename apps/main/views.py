@@ -12,7 +12,7 @@ from django.db.models import Q
 
 def genErrors(request, Emessages):
 	for message in Emessages:
-		messages.error(request, message)
+		messages.warning(request, message)
 
 def checkLogin(request):
 	try:
@@ -103,10 +103,11 @@ def requestChange(request):
 	'user': user,
 	'today': today,
 	'types': Change.TYPE,
-	'enviornments': Change.ENVIORNMENT,
+	'enviornments': Change.ENVIRONMENT,
 	}
 	return render( request, 'main/request-change.html', context)
 
+from django.core.files.storage import FileSystemStorage
 def changeCreation(request):
 	results = []
 	results.append(checkLogin(request))
@@ -115,8 +116,23 @@ def changeCreation(request):
 		return redirect('/login')
 	if results[1] == False:
 		return redirect('/account-suspended')
+	
+	try:
+		request.FILES['fileUpload']
+	except:
+		request.FILES['fileUpload'] = None
+
+	fs = FileSystemStorage()
+	uploaded_file_url = fs.url("")
+	if request.FILES['fileUpload'] != None:
+		myfile = request.FILES['fileUpload']
+		fs = FileSystemStorage()
+		filename = fs.save('supplemental/' + myfile.name, myfile)
+		uploaded_file_url = fs.url(filename)
+
 	user = User.objects.get(id = request.session['user_id'])
-	change = Change.objects.createChange(request.POST, user)
+	change = Change.objects.createChange(request.POST, user, uploaded_file_url)
+	messages.success(request, "Change <a href='/change/req" + str(change.id) + "'>REQ" + str(change.id) + "</a> Has Been Created." )
 	return redirect("/my-requests")
 
 ############################################################################################
@@ -189,11 +205,60 @@ def viewChange(request, id):
 	# Get Change
 	change = Change.objects.get(id = id)
 
+	users = User.objects.filter().all()
+
+	print(change.assignee)
+
 	context = {
 	'change': change,
+	'statuses': Change.STATUS,
 	'types': Change.TYPE,
+	'environments': Change.ENVIRONMENT,
+	'users': users,
 	}
 	return render( request, 'main/view-change.html', context)
+
+def updateChange(request, id):
+	results = []
+	results.append(checkLogin(request))
+	results.append(checkActive(request))
+	if results[0] == False:
+		return redirect('/login')
+	if results[1] == False:
+		return redirect('/account-suspended')
+	
+	change = Change.objects.get(id = id)
+
+	change.status = request.POST['status']
+	change.targetDate = request.POST['targetDate'] 
+	change.requestType = request.POST['requestType'] 
+	change.environment = request.POST['environment']
+	if request.POST['assignee'] == "None":
+		change.assignee = None
+	else:
+		user = User.objects.get(id = request.POST['assignee'])
+		change.assignee = user 
+	change.shortDescription = request.POST['shortDescription'] 
+	change.longDescription = request.POST['longDescription'] 
+	change.changeImpact = request.POST['changeImpact'] 
+	# change.fileUpload = 
+	change.save()
+
+	messages.success(request, 'REQ' + str(change.id) + " Was Successfully Updated")
+
+	return redirect("/change/req" + id)
+
+def deleteChange(request, id):
+	results = []
+	results.append(checkLogin(request))
+	results.append(checkActive(request))
+	if results[0] == False:
+		return redirect('/login')
+	if results[1] == False:
+		return redirect('/account-suspended')
+	Change.objects.filter(id = id).delete()
+	messages.success(request, 'REQ' + str(id) + " Was Successfully Deleted")
+	return redirect("/")
 
 ############################################################################################
 
@@ -205,7 +270,7 @@ def error500(request):
 		return redirect('/login')
 	if results[1] == False:
 		return redirect('/account-suspended')
-	return render( request, 'main/pages-500.html')
+	return render( request, 'main/500.html')
 
 ############################################################################################
 
@@ -218,3 +283,81 @@ def error403(request):
 	# if results[1] == False:
 	# 	return redirect('/account-suspended')
 	return render( request, 'main/pages-403.html')
+
+############################################################################################
+
+from django.template import RequestContext
+
+# HTTP Error 404
+def error404(request, exception):
+	results = []
+	results.append(checkLogin(request))
+	results.append(checkActive(request))
+	if results[0] == False:
+		return redirect('/login')
+	if results[1] == False:
+		return redirect('/account-suspended')
+
+	data = {}
+	return render(request,'main/404.html', data)
+
+############################################################################################
+
+def statusPage(request):
+	results = []
+	results.append(checkLogin(request))
+	results.append(checkActive(request))
+	if results[0] == False:
+		return redirect('/login')
+	if results[1] == False:
+		return redirect('/account-suspended')
+	return render( request, 'main/status-page.html')
+
+############################################################################################
+
+def accountManagement(request):
+	results = []
+	results.append(checkLogin(request))
+	results.append(checkActive(request))
+	if results[0] == False:
+		return redirect('/login')
+	if results[1] == False:
+		return redirect('/account-suspended')
+	return render( request, 'main/account-management.html')
+
+def updateAccountInfo(request):
+	results = []
+	results.append(checkLogin(request))
+	results.append(checkActive(request))
+	if results[0] == False:
+		return redirect('/login')
+	if results[1] == False:
+		return redirect('/account-suspended')
+
+	user = User.objects.get(id = request.session['user_id'])
+	user.firstName = request.POST['firstName']
+	user.lastName = request.POST['lastName']
+	user.email = request.POST['email']
+	user.save()
+	request.session['firstName'] = user.firstName
+	request.session['lastName'] = user.lastName
+	request.session['email'] = user.email
+	messages.success(request, "Your Account Info has Been Updated.")
+	return render( request, 'main/account-management.html')
+
+def updatePassword(request):
+	results = []
+	results.append(checkLogin(request))
+	results.append(checkActive(request))
+	if results[0] == False:
+		return redirect('/login')
+	if results[1] == False:
+		return redirect('/account-suspended')
+
+	results = User.objects.changePassword(request.POST, request.session['user_id'])
+	if results['status'] == False:
+		print("THERE IS AN ERROR")
+		genErrors(request, results['errors'])
+		return redirect('/account#password')
+	messages.success(request, "Your Password has Been Successfully Updated.")
+	return redirect('/account')

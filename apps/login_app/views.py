@@ -19,6 +19,9 @@ def checkUser(request):
 		return False
 
 def identity(request):
+	results = checkUser(request)
+	if results == False:
+		return redirect('/login')
 	return render(request, 'login_app/identity.html')
 
 def login(request):
@@ -40,7 +43,7 @@ def accountcreation(request):
 		messages.success(request, 'User was created. Please log in.')
 	else: 
 		genErrors(request, results['errors'])
-	return redirect('/login')
+	return redirect('/identity')
 
 from django.views.decorators.csrf import ensure_csrf_cookie
  

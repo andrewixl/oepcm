@@ -10,7 +10,7 @@
 						<div class="col-md-12">
 							<div class="card">
 								<div class="card-body">
-									<form class="needs-validation" action='/change-creation' method='post' novalidate>
+									<form class="needs-validation" action='/change-creation' method='post' enctype="multipart/form-data" novalidate>
 										{% csrf_token %}
 										<div class="row">
 											<div class="col-12 col-xl-6">
@@ -59,7 +59,7 @@
 										<div class="row">
 											<div class="mb-3 col-md-6">
 												<label class="form-label">Enviornment</label>
-												<select name="enviornment" class="form-select">
+												<select name="environment" class="form-select">
 													<option>Select Enviornment</option>
 													{% for x,y in enviornments %}
 													<option value={{x}}>{{y}}</option>
@@ -80,7 +80,7 @@
 										</div>
 										<div class="mb-3">
 											<label class="form-label w-100">Supplemental File</label>
-											<input type="file" name=fileUpload>
+											<input type="file" name="fileUpload">
 											<!-- <small class="form-text text-muted">Example block-level help text here.</small> -->
 										</div>
 										<button type="submit" class="btn btn-primary">Submit</button>

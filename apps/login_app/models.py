@@ -8,10 +8,10 @@ import bcrypt
 class UserManager(models.Manager):
 	def registerVal(self, postData):
 		results = {'status': True, 'errors': [], 'user': None}
-		if len(postData['firstName']) < 3:
+		if len(postData['firstName']) < 2:
 			results['status'] = False
 			results['errors'].append('First Name must be at least 3 characters - Account Not Created')
-		if len(postData['lastName']) < 3:
+		if len(postData['lastName']) < 2:
 			results['status'] = False
 			results['errors'].append('Last Name must be at least 3 characters - Account Not Created')
 		if not re.match(r"[^@]+@[^@]+\.[^@]+", postData['email']):
@@ -56,6 +56,27 @@ class UserManager(models.Manager):
 			if hashed  != results['user'][0].password:
 				results['status'] = False
 				results['errors'].append('Something went wrong')
+		return results
+	
+	def changePassword(self, postData, id):
+		results = {'status': True, 'errors': [], 'user': None}
+		results['user'] = User.objects.filter(id = id)
+
+		hashed = bcrypt.hashpw(postData['currentPassword'].encode(), results['user'][0].password.encode())
+		if hashed  != results['user'][0].password:
+			results['status'] = False
+			results['errors'].append('Incorrect Current Password')
+			return results
+		elif postData['newPassword']  != postData['newPasswordConfirm']:
+			results['status'] = False
+			results['errors'].append('New Passwords Do Not Match')
+			return results
+		else:
+			p_hash = bcrypt.hashpw(postData['newPassword'].encode(), bcrypt.gensalt())
+		
+		user = User.objects.get(id = id)
+		user.password = p_hash
+		user.save()
 		return results
 
 

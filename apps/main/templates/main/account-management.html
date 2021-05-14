@@ -1,0 +1,106 @@
+{% extends 'main/base.html' %}
+{% load static %}
+  {% block content %}
+			<main class="content">
+				<div class="container-fluid p-0">
+
+					<h1 class="h3 mb-3">Settings</h1>
+
+					<div class="row">
+						<div class="col-md-3 col-xl-2">
+
+							<div class="card">
+								<div class="card-header">
+									<h5 class="card-title mb-0">Profile Settings</h5>
+								</div>
+
+								<div class="list-group list-group-flush" role="tablist">
+									<a class="list-group-item list-group-item-action active" data-bs-toggle="list" href="#account" role="tab">
+										Account
+									</a>
+									<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#password" role="tab">
+										Password
+									</a>
+									<!-- <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
+										Privacy and safety
+									</a>
+									<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
+										Email notifications
+									</a>
+									<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
+										Web notifications
+									</a>
+									<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
+										Widgets
+									</a>
+									<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
+										Your data
+									</a>
+									<a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
+										Delete account
+									</a> -->
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-9 col-xl-10">
+							<div class="tab-content">
+								<div class="tab-pane fade show active" id="account" role="tabpanel">
+									<div class="card">
+										<div class="card-body">
+											<h5 class="card-title"><strong>Account Info</strong></h5>
+											<form action='/update-account-info' method='post'>
+												{% csrf_token %}
+												<div class="row">
+													<div class="mb-3 col-md-6">
+														<label class="form-label" for="firstName">First name</label>
+														<input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name" value={{request.session.firstName}}>
+													</div>
+													<div class="mb-3 col-md-6">
+														<label class="form-label" for="lastName">Last name</label>
+														<input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name" value={{request.session.lastName}}>
+													</div>
+												</div>
+												<div class="mb-3">
+													<label class="form-label" for="email">Email</label>
+													<input type="email" class="form-control" id="email" name="email" placeholder="Email" value={{request.session.email}}>
+												</div>
+												<button type="submit" class="btn btn-primary">Save Changes</button>
+											</form>
+
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane fade" id="password" role="tabpanel">
+									<div class="card">
+										<div class="card-body">
+											<h5 class="card-title"><strong>Change Password</strong></h5>
+
+											<form action='/update-password' method='post'>
+												{% csrf_token %}
+												<div class="mb-3">
+													<label class="form-label" for="currentPassword">Current Password</label>
+													<input type="password" class="form-control" id="currentPassword" name="currentPassword">
+													<!-- <small><a href="#">Forgot your password?</a></small> -->
+												</div>
+												<div class="mb-3">
+													<label class="form-label" for="newPassword">New Password</label>
+													<input type="password" class="form-control" id="newPassword" name="newPassword">
+												</div>
+												<div class="mb-3">
+													<label class="form-label" for="newPasswordConfirm">Verify Password</label>
+													<input type="password" class="form-control" id="newPasswordConfirm" name="newPasswordConfirm">
+												</div>
+												<button type="submit" class="btn btn-primary">Save changes</button>
+											</form>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</main>
+			{% endblock %}

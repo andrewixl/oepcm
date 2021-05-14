@@ -142,6 +142,18 @@
 						</a>
 					</li>	
 				</ul>
+				<div class="sidebar-cta">
+					<div class="sidebar-cta-content">
+						<strong class="d-inline-block mb-2">Status: Prototype</strong>
+						<div class="mb-3 text-sm">
+							View Current Version and Upcoming Changes
+						</div>
+
+						<div class="d-grid">
+							<a href="/status-page" class="btn btn-outline-primary" target="_blank">View</a>
+						</div>
+					</div>
+				</div>
 			</div>
 		</nav>
 
@@ -195,13 +207,12 @@
 								<span class="text-dark">{{request.session.firstName}} {{request.session.lastName}}</span>
 							</a>
 							<div class="dropdown-menu dropdown-menu-end">
-								<!-- <a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
-								<a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="pie-chart"></i> Analytics</a>
-								<div class="dropdown-divider"></div> -->
-								<!-- <a class="dropdown-item" href="pages-settings.html"><i class="align-middle me-1" data-feather="settings"></i> Settings &
-									Privacy</a> -->
+								<a class="dropdown-item" href="/account"><i class="align-middle me-1" data-feather="user"></i> Account</a>
+								<!-- <a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="pie-chart"></i> Analytics</a> -->
+								<div class="dropdown-divider"></div>
 								{% if request.session.permission == 'administrator' %}
-								<a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="shield"></i> Admin Panel </a>
+								<a class="dropdown-item" href="/admin"><i class="align-middle me-1" data-feather="shield"></i> Admin Panel </a>
+								<a class="dropdown-item" href="/identity"><i class="align-middle me-1" data-feather="users"></i> User Management </a>
 								<div class="dropdown-divider"></div>
 								{% endif %}
 								<a class="dropdown-item" href="/logout"><i class="align-middle me-1" data-feather="lock"></i> Log out </a>
@@ -210,6 +221,16 @@
 					</ul>
 				</div>
 			</nav>
+			{% if messages %}
+				{% for message in messages %}
+				<div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
+					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					<div class="alert-message">
+						<strong>{{message|safe}}</strong>
+					</div>
+				</div>
+				{% endfor %}
+			{% endif %}
 
 			{% block content %}
             {% endblock %}
@@ -219,7 +240,7 @@
 					<div class="row text-muted">
 						<div class="col-6 text-start">
 							<p class="mb-0">
-								<a href="index.html" class="text-muted"><strong>OeP Company Change Management System</strong></a> &copy;
+								<a href="/" class="text-muted"><strong>OeP Company Change Management System</strong></a> &copy;
 							</p>
 						</div>
 						<div class="col-6 text-end">

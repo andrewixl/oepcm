@@ -8,7 +8,7 @@ class ChangeManager(models.Manager):
         results = {'status': True, 'errors': [], 'user': None}
         return results
 
-    def createChange(self, postData, user):
+    def createChange(self, postData, user, fileURL):
         # Defaults
         status = 'new'
 
@@ -20,7 +20,7 @@ class ChangeManager(models.Manager):
         change = Change.objects.create(
 			status = status, 
 			requestType = postData['requestType'], 
-			environment = postData['enviornment'],
+			environment = postData['environment'],
             requestor = user,
             assignee = None,
             entryDate = entryDate,
@@ -28,7 +28,7 @@ class ChangeManager(models.Manager):
             shortDescription = postData['shortDescription'],
             longDescription = postData['longDescription'],
             changeImpact = postData['changeImpact'],
-            fileUpload = postData['fileUpload'],
+            fileUpload = fileURL,
 			)
         return change
 
@@ -48,12 +48,12 @@ class Change(models.Model):
         ('wordpress-site', 'WordPress Site'),
     )
     requestType = models.CharField(max_length=20, choices=TYPE, verbose_name='Request Type')
-    ENVIORNMENT = (
+    ENVIRONMENT = (
         ('development', 'Development'),
         ('test', 'Testing'),
         ('production', 'Production'),
     )
-    environment = models.CharField(max_length=20, choices=ENVIORNMENT, verbose_name='Enviornment')
+    environment = models.CharField(max_length=20, choices=ENVIRONMENT, verbose_name='Environment')
     requestor = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Requestor', related_name="Requestor")
     assignee = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Assignee', related_name="Assignee", blank=True, null=True)
     entryDate = models.DateField(verbose_name='Entry Date')
