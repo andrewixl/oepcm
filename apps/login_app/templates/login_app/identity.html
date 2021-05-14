@@ -19,6 +19,16 @@
 		<input type="password" name="c_password" placeholder="Confirm password." size=30><br>
 		<input type='submit' value='Click here to register.'>
 	</form>
+	<br><br><br>
+	<form action='/accountcreation' method='post'>
+		{%csrf_token%}
+		<input type="text" name="firstName" placeholder="Enter your first name here." size=30><br>
+		<input type="text" name="lastName" placeholder="Enter your last name here." size=30><br>
+		<input type="email" name="email" placeholder="Enter your email here." size=30><br>
+		<input type="password" name="password" value="Password1234$" size=30><br>
+		<input type="password" name="c_password" value="Password1234$" size=30><br>
+		<input type='submit' value='Click here to register.'>
+	</form>
 
 	<!-- <p>Login here.</p>
 	<form action='/checklogin' method='post'>

@@ -1,8 +1,8 @@
 from __future__ import unicode_literals
-# from ..portal.models import Course
 from django.db import models
 import re
-import bcrypt
+
+from django.contrib.auth.hashers import make_password, check_password
 
 # Create your models here.
 class UserManager(models.Manager):
@@ -33,7 +33,7 @@ class UserManager(models.Manager):
 		#check to see if user is not in db
 		return results
 	def createUser(self, postData):
-		p_hash = bcrypt.hashpw(postData['password'].encode(), bcrypt.gensalt())
+		p_hash = make_password(postData['password'])
 
 		user = User.objects.create(
 			active = True, 
@@ -53,7 +53,8 @@ class UserManager(models.Manager):
 			results['errors'].append('User does not exist')
 		else:
 			user = User.objects.get(email = postData['email'])
-			if bcrypt.checkpw(postData['password'].encode(), user.password):
+
+			if check_password(postData['password'], user.password):
 				print('match')
 			else:
 				results['status'] = False
@@ -64,8 +65,8 @@ class UserManager(models.Manager):
 		results = {'status': True, 'errors': [], 'user': None}
 		results['user'] = User.objects.filter(id = id)
 
-		hashed = bcrypt.hashpw(postData['currentPassword'].encode(), results['user'][0].password.encode())
-		if hashed  != results['user'][0].password:
+		user = User.objects.get(id = id)
+		if not check_password(postData['currentPassword'], user.password):
 			results['status'] = False
 			results['errors'].append('Incorrect Current Password')
 			return results
@@ -74,9 +75,8 @@ class UserManager(models.Manager):
 			results['errors'].append('New Passwords Do Not Match')
 			return results
 		else:
-			p_hash = bcrypt.hashpw(postData['newPassword'].encode(), bcrypt.gensalt())
+			p_hash = make_password(postData['newPassword'])
 		
-		user = User.objects.get(id = id)
 		user.password = p_hash
 		user.save()
 		return results
@@ -96,7 +96,6 @@ class User(models.Model):
 	email = models.CharField(verbose_name='Email Address', max_length = 40)
 	emailVerified = models.BooleanField(verbose_name='Email Verified?')
 	password = models.CharField(verbose_name='Password', max_length = 1000)
-	# profile_photo = models.ImageField(upload_to="media/", default='media/placeholder-profile-1.png')
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
 	objects = UserManager()
