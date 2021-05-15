@@ -24,6 +24,13 @@ def identity(request):
 		return redirect('/login')
 	return render(request, 'login_app/identity.html')
 
+def unclaimed(request):
+	if User.objects.all().count() == 0:
+		return render(request, 'login_app/unclaimed.html')
+	else:
+		return redirect('/login')
+	
+
 def login(request):
 	results = checkUser(request)
 	if results == True:

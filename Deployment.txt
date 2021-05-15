@@ -11,7 +11,7 @@ cd oepcm
 virtualenv venv
 source venv/bin/activate
 pip install -r requirements.txt
-pip install django bcrypt django-extensions
+pip install django django-extensions
 pip install gunicorn
 
 cd oepcm
@@ -26,6 +26,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 cd ..
 
+python manage.py migrate
 python manage.py collectstatic
 gunicorn --bind 0.0.0.0:0000 oepcm.wsgi:application
 

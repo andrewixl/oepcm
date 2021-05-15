@@ -34,9 +34,15 @@ class UserManager(models.Manager):
 		return results
 	def createUser(self, postData):
 		p_hash = make_password(postData['password'])
+		permission = ''
+		if User.objects.all().count() == 0:
+			permission = 'administrator'
+		else:
+			permission = 'standard'
 
 		user = User.objects.create(
 			active = True, 
+			permission = permission,
 			firstName = postData['firstName'], 
 			lastName = postData['lastName'], 
 			email = postData['email'], 
