@@ -208,7 +208,7 @@ def pastChanges(request):
 	"types": Change.TYPE,
 	"changes": changes,
 	}
-	return render( request, 'main/past-Changes.html', context)
+	return render( request, 'main/past-changes.html', context)
 
 ############################################################################################
 
