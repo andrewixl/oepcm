@@ -25,17 +25,20 @@ def identity(request):
 	return render(request, 'login_app/identity.html')
 
 def unclaimed(request):
-	if User.objects.all().count() == 0:
-		return render(request, 'login_app/unclaimed.html')
-	else:
+	if User.objects.all().count() > 0:
 		return redirect('/login')
+	else:
+		return render(request, 'login_app/unclaimed.html')
 	
 
 def login(request):
 	results = checkUser(request)
 	if results == True:
 		return redirect('/')
-	return render( request, 'login_app/login.html')
+	if User.objects.all().count() == 0:
+		return redirect('/unclaimed')
+	else:
+		return render( request, 'login_app/login.html')
 
 def accountcreation(request):
 	results = User.objects.registerVal(request.POST)
