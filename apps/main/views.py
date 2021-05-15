@@ -7,8 +7,10 @@ from .models import Change
 from ..login_app.models import User
 # Advanced Django Queries
 from django.db.models import Q
-# Dates
+# Date Management
 from datetime import date, datetime
+# File System Storage
+from django.core.files.storage import FileSystemStorage
 
 ############################################################################################
 
@@ -52,6 +54,14 @@ def index(request):
 	for change in active_changes:
 		if change.daysLeft < 0:
 			past_due_changes += 1
+
+	today = date.today()
+	year = today.strftime("%Y")
+	month = today.strftime("%m")
+	month_name = today.strftime("%B")
+	changes_month = Change.objects.filter(entryDate__year = year, entryDate__month = month).count()
+	changes_year = Change.objects.filter(entryDate__year = year).count()
+	
 	
 	latest_changes = Change.objects.filter(Q(status = 'in_progress') | Q(status = 'new')).order_by('-updated_at')[:5]
 
@@ -61,7 +71,11 @@ def index(request):
 		"active_changes": active_changes_num,
 		"past_due_changes": past_due_changes,
 		"changes": changes,
-		"latest_changes": latest_changes
+		"changes_month": changes_month,
+		"month": month_name,
+		"changes_year": changes_year,
+		"year": year,
+		"latest_changes": latest_changes,
 	}
 	return render( request, 'main/index.html', context)
 
@@ -113,7 +127,6 @@ def requestChange(request):
 	}
 	return render( request, 'main/request-change.html', context)
 
-from django.core.files.storage import FileSystemStorage
 def changeCreation(request):
 	results = []
 	results.append(checkLogin(request))
@@ -213,14 +226,17 @@ def viewChange(request, id):
 
 	users = User.objects.filter().all()
 
-	print(change.assignee)
+	today = date.today().strftime("%Y-%m-%d")
+	print(today)
 
 	context = {
 	'change': change,
+	'priorities': Change.PRIORITY,
 	'statuses': Change.STATUS,
 	'types': Change.TYPE,
 	'environments': Change.ENVIRONMENT,
 	'users': users,
+	'today': today,
 	}
 	return render( request, 'main/view-change.html', context)
 
@@ -235,6 +251,7 @@ def updateChange(request, id):
 	
 	change = Change.objects.get(id = id)
 
+	change.priority = request.POST['priority']
 	change.status = request.POST['status']
 	change.targetDate = request.POST['targetDate'] 
 	change.requestType = request.POST['requestType'] 
@@ -247,10 +264,28 @@ def updateChange(request, id):
 	change.shortDescription = request.POST['shortDescription'] 
 	change.longDescription = request.POST['longDescription'] 
 	change.changeImpact = request.POST['changeImpact'] 
-	# change.fileUpload = 
-	change.updated_at = datetime.now()
-	change.save()
 
+	fs = FileSystemStorage()
+	uploaded_file_url = fs.url("")
+	try:
+		print(request.FILES)
+		if request.FILES['fileUpload'] != None:
+			myfile = request.FILES['fileUpload']
+			fs = FileSystemStorage()
+			filename = fs.save('supplemental/' + myfile.name, myfile)
+			uploaded_file_url = fs.url(filename)
+		change.fileUpload = uploaded_file_url
+	except:
+		print("No File")
+
+	change.updated_at = datetime.now()
+	
+
+	if change.status == 'done':
+		change.completionDate = request.POST['completionDate']
+		change.completionNotes = request.POST['completionNotes']
+
+	change.save()
 	messages.success(request, 'REQ' + str(change.id) + " Was Successfully Updated")
 
 	return redirect("/change/req" + id)
@@ -266,6 +301,28 @@ def deleteChange(request, id):
 	Change.objects.filter(id = id).delete()
 	messages.success(request, 'REQ' + str(id) + " Was Successfully Deleted")
 	return redirect("/")
+
+def completeChange(request, id):
+	results = []
+	results.append(checkLogin(request))
+	results.append(checkActive(request))
+	if results[0] == False:
+		return redirect('/login')
+	if results[1] == False:
+		return redirect('/account-suspended')
+	
+	change = Change.objects.get(id = id)
+
+	change.status = 'done'
+	change.completionDate = request.POST['completionDate'] 
+	change.completionNotes = request.POST['completionNotes'] 
+
+	change.updated_at = datetime.now()
+	change.save()
+
+	messages.success(request, 'Congrats! REQ' + str(change.id) + " Was Successfully Completed")
+
+	return redirect("/change/req" + id)
 
 ############################################################################################
 

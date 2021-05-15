@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^past-changes$', views.pastChanges),
     url(r'^change/req(?P<id>\d+)$', views.viewChange),
     url(r'^update-change/(?P<id>\d+)$', views.updateChange),
+    url(r'^complete-change/(?P<id>\d+)$', views.completeChange),
     url(r'^delete/(?P<id>\d+)$', views.deleteChange),
     url(r'^report/all-changes$', views.error500),
     url(r'^report/change-timelines$', views.error500),

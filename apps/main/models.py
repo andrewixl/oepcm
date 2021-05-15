@@ -33,6 +33,14 @@ class ChangeManager(models.Manager):
         return change
 
 class Change(models.Model):
+    PRIORITY = (
+        ('low', "Low"),
+        ('medium', "Medium"),
+        ("high", "High"),
+        ("urgent", "Urgent"),
+        ("emergency", "Emergency"),
+    )
+    priority = models.CharField(max_length=20, choices=PRIORITY, verbose_name='Priority')
     STATUS = (
         ('new', "New"),
         ('in_progress', "In Progress"),
@@ -63,6 +71,8 @@ class Change(models.Model):
     longDescription = models.CharField(max_length = 250, verbose_name='Long Description')
     changeImpact = models.CharField(max_length = 250, verbose_name='Change Impact')
     fileUpload = models.FileField(upload_to ='supplemental', blank=True, null=True, verbose_name='File Upload')
+    completionDate = models.DateField(verbose_name='Completion Date' , blank=True, null=True)
+    completionNotes = models.CharField(max_length = 250, verbose_name='Completion Notes' , blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = ChangeManager()
