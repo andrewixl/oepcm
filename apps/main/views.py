@@ -7,6 +7,8 @@ from .models import Change
 from ..login_app.models import User
 # Advanced Django Queries
 from django.db.models import Q
+# Dates
+from datetime import date, datetime
 
 ############################################################################################
 
@@ -43,19 +45,23 @@ def index(request):
 		return redirect('/account-suspended')
 
 	changes = Change.objects.filter().all()	
-	active_changes = Change.objects.filter().all().count()
+	active_changes = Change.objects.filter(Q(status = 'in_progress') | Q(status = 'new'))
+	active_changes_num = Change.objects.filter(Q(status = 'in_progress') | Q(status = 'new')).count()
 
 	past_due_changes = 0
-	for change in changes:
+	for change in active_changes:
 		if change.daysLeft < 0:
 			past_due_changes += 1
+	
+	latest_changes = Change.objects.filter(Q(status = 'in_progress') | Q(status = 'new')).order_by('-updated_at')[:5]
 
 
 	context = {
 		"page": "index",
-		"active_changes": active_changes,
+		"active_changes": active_changes_num,
 		"past_due_changes": past_due_changes,
 		"changes": changes,
+		"latest_changes": latest_changes
 	}
 	return render( request, 'main/index.html', context)
 
@@ -242,6 +248,7 @@ def updateChange(request, id):
 	change.longDescription = request.POST['longDescription'] 
 	change.changeImpact = request.POST['changeImpact'] 
 	# change.fileUpload = 
+	change.updated_at = datetime.now()
 	change.save()
 
 	messages.success(request, 'REQ' + str(change.id) + " Was Successfully Updated")
@@ -361,3 +368,30 @@ def updatePassword(request):
 		return redirect('/account#password')
 	messages.success(request, "Your Password has Been Successfully Updated.")
 	return redirect('/account')
+
+############################################################################################
+
+from json import dumps
+from django.http import JsonResponse, HttpResponse
+  
+def data(request):
+	
+	today = date.today()
+	year = today.strftime("%Y")
+	# print(today)
+	success = []
+	for i in range(1,13):
+		success.append(Change.objects.filter(entryDate__year = year, entryDate__month = i, status="done").count())
+	in_progress = []
+	for i in range(1,13):
+		in_progress.append(Change.objects.filter(entryDate__year = year, entryDate__month = i, status="in_progress").count())
+	failure = []
+	for i in range(1,13):
+		failure.append(Change.objects.filter(entryDate__year = year, entryDate__month = i, status="cancelled").count())
+    # create data dictionary
+	dataDictionary = {
+        "success": success,
+		"in_progress": in_progress,
+        "failure": failure,
+    }
+	return JsonResponse(dataDictionary)

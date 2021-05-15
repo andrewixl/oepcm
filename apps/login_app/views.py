@@ -19,9 +19,9 @@ def checkUser(request):
 		return False
 
 def identity(request):
-	# results = checkUser(request)
-	# if results == False:
-	# 	return redirect('/login')
+	results = checkUser(request)
+	if results == False:
+		return redirect('/login')
 	return render(request, 'login_app/identity.html')
 
 def login(request):

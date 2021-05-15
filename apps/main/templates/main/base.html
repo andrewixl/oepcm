@@ -46,7 +46,7 @@
 					<li class="sidebar-item">
 					{% endif %}
 						<a class="sidebar-link" href="/">
-							<i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+							<i class="align-middle" data-feather="activity"></i> <span class="align-middle">Dashboard</span>
 						</a>
 					</li>
 					
@@ -267,7 +267,7 @@
 
 	<script src="{% static 'main/js/app.js' %}"></script>
 
-	<script>
+	<!-- <script>
 		document.addEventListener("DOMContentLoaded", function() {
 			var ctx = document.getElementById("chartjs-dashboard-line").getContext("2d");
 			var gradient = ctx.createLinearGradient(0, 0, 0, 225);
@@ -336,8 +336,8 @@
 				}
 			});
 		});
-	</script>
-	<script>
+	</script> -->
+	<!-- <script>
 		document.addEventListener("DOMContentLoaded", function() {
 			// Pie chart
 			new Chart(document.getElementById("chartjs-dashboard-pie"), {
@@ -364,8 +364,8 @@
 				}
 			});
 		});
-	</script>
-	<script>
+	</script> -->
+	<!-- <script>
 		document.addEventListener("DOMContentLoaded", function() {
 			// Bar chart
 			new Chart(document.getElementById("chartjs-dashboard-bar"), {
@@ -408,8 +408,8 @@
 				}
 			});
 		});
-	</script>
-	<script>
+	</script> -->
+	<!-- <script>
 		document.addEventListener("DOMContentLoaded", function() {
 			var markers = [{
 					coords: [31.230391, 121.473701],
@@ -475,7 +475,7 @@
 				map.updateSize();
 			});
 		});
-	</script>
+	</script> -->
 	<script>
 		document.addEventListener("DOMContentLoaded", function() {
 			document.getElementById("datetimepicker-dashboard").flatpickr({
@@ -517,8 +517,20 @@
 	<script>
 		document.addEventListener("DOMContentLoaded", function() {
 			// Datatables Responsive
-			$("table").DataTable({
+			$("#table").DataTable({
 				responsive: true
+			});
+			$("#latest_changes").DataTable({
+				responsive: true,
+				paging:   false,
+				searching: false,
+				columnDefs: [
+					{
+						"targets": [ 6 ],
+						"visible": false,
+					},
+				],
+				order: [[ 6, "desc" ]]
 			});
 		});
 	</script>

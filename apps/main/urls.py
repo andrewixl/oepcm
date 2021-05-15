@@ -34,5 +34,7 @@ urlpatterns = [
     url(r'^update-password$', views.updatePassword),
 
     url(r'^account-suspended$', views.error403),
+
+    url(r'^data$', views.data),
 ] 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

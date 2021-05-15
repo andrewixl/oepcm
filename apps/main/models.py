@@ -46,8 +46,9 @@ class Change(models.Model):
         ('customer-platform', 'Customer Platform'),
         ('power-bi', 'Power BI'),
         ('wordpress-site', 'WordPress Site'),
+        ('change-management-system', 'Change Management System'),
     )
-    requestType = models.CharField(max_length=20, choices=TYPE, verbose_name='Request Type')
+    requestType = models.CharField(max_length=30, choices=TYPE, verbose_name='Request Type')
     ENVIRONMENT = (
         ('development', 'Development'),
         ('test', 'Testing'),
