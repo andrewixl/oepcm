@@ -24,7 +24,7 @@ class UserManager(models.Manager):
 			results['status'] = False
 			results['errors'].append('Passwords do not Match  - Account Not Created')
 
-		user = User.objects.filter(email = postData['email'])
+		user = User.objects.filter(email = postData['email'].lower())
 		print (user, '*****', len(user))
 		if len(user) >= 1:
 			results['status'] = False
@@ -45,7 +45,7 @@ class UserManager(models.Manager):
 			permission = permission,
 			firstName = postData['firstName'], 
 			lastName = postData['lastName'], 
-			email = postData['email'], 
+			email = postData['email'].lower(), 
 			emailVerified = False, 
 			password = p_hash,)
 		return user
@@ -53,12 +53,12 @@ class UserManager(models.Manager):
 	# Used to check if user entered correct email and password	
 	def loginVal(self, postData):
 		results = {'status': True, 'errors': [], 'user': None}
-		results['user'] = User.objects.filter(email = postData['email'])
+		results['user'] = User.objects.filter(email = postData['email'].lower())
 		if len(results['user'] ) <1:
 			results['status'] = False
 			results['errors'].append('User does not exist')
 		else:
-			user = User.objects.get(email = postData['email'])
+			user = User.objects.get(email = postData['email'].lower())
 
 			if check_password(postData['password'], user.password):
 				print('match')

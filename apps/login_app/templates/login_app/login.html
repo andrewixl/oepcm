@@ -51,6 +51,16 @@
 									<div class="text-center">
 										<img src="{% static 'login_app/img/logo.png' %}" alt="OeP Company Logo" class="img-fluid" width="132" height="132" />
 									</div>
+									{% if messages %}
+										{% for message in messages %}
+										<div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
+											<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+											<div class="alert-message">
+												<strong>{{message|safe}}</strong>
+											</div>
+										</div>
+										{% endfor %}
+									{% endif %}
 									<form action='/checklogin' method='post'>
 										{% csrf_token %}
 										<div class="mb-3">
