@@ -18,11 +18,29 @@ def checkUser(request):
 	except:
 		return False
 
+def checkAdmin(request):
+	try:
+		user = User.objects.get(id = request.session['user_id'])
+		if user.permission == 'administrator':
+			return True
+		else:
+			return False
+	except:
+		return False
+
 def identity(request):
 	results = checkUser(request)
 	if results == False:
 		return redirect('/login')
-	return render(request, 'login_app/identity.html')
+	resultsAdmin = checkAdmin(request)
+	if resultsAdmin == False:
+		messages.error(request, "You do not have Permission to Access this Resource")
+		return redirect('/')
+	user = User.objects.all()
+	context = {
+		'user': user,
+	}
+	return render(request, 'login_app/identity.html', context)
 
 def unclaimed(request):
 	if User.objects.all().count() > 0:
