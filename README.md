@@ -1,7 +1,3 @@
-<a href="https://github.com/andrewixl/reverseproxy/blob/master/LICENSE.txt"><img alt="GitHub license" src="https://img.shields.io/github/license/andrewixl/reverseproxy"></a>
-<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/andrewixl/reverseproxy">
-<a href="https://github.com/andrewixl/reverseproxy/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/andrewixl/reverseproxy"></a>
-
 # AwB Tech Change Management System 
 The change management system originally created for OeP Company and adpapted to be used with any company as a IT Change Management System.
 
